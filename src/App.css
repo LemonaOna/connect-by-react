@@ -1,68 +1,148 @@
+:root {
+    --main: #61D9FA;
+    --main_opaque_5: rgba(97, 217, 250, 0.5);
+    --main_opaque_7: rgba(97, 217, 250, 0.7);
+}
+
 .App {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  background-color: #282c34;
-  align-items: center;
-  justify-content: space-between;
-  font-size: calc(10px + 2vmin);
-  min-height: 100vh;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    background-color: #282c34;
+    align-items: center;
+    justify-content: space-between;
+    font-size: calc(10px + 2vmin);
+    min-height: 100vh;
 }
 
-h1{
-  color: lightblue;
+.App-logo {
+    height: 5vmin;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
+}
+
+.App-link {
+    color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+h1 {
+    color: var(--main);
 }
 
 
-.game-cell{
-  background: white;
-  height: 50px;
-  width:50px;
-  margin:2px;
-  grid-area: auto;
+.game-cell {
+    background: #2D2FA2;
+    height: 50px;
+    width: 50px;
+    grid-area: auto;
 }
 
-.hint-cell, .game-cell{
-  padding: 4px;
+.game-cell > div:not(.coin){
+    border-radius: 100%;
+    height: 50px;
+    width: 50px;
+    margin: auto;
+    background: white;
 }
 
-.game-cell.selected{
-  background:lightblue
+.hint-cell, .game-cell {
+    padding: 4px;
 }
 
-.hint-cell{
-  background: #282c34;
-  margin:2px
+.game-cell.selected {
+    background: lightblue;
+    cursor: pointer;
 }
 
-.coin{
-  border-radius: 100%;
-  width:100%;
-  height:100%;
-  margin: 2px;
+.game-cell.selected.noFree {
+    background: lightcoral;
 }
 
-.hint-cell .coin{
-  /*border: 2px solid red;*/
+.hint-cell {
+    background: #282c34;
+    position: relative;
 }
 
-#game-board{
-  background: grey;
-  display:grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: 1fr repeat(6, 1fr);
-  border:2px solid black;
+.coin {
+    border-radius: 100%;
+    height: 50px;
+    width: 50px;
+    margin: auto;
+    background-position: center;
+    background-size: contain;
 }
 
-#stats{
-  background: white;
-  padding: 8px;
-  display:flex;
-  justify-content: space-around;
-  margin-bottom: 20px
+
+
+.hint-cell .coin {
+    visibility: hidden;
+    position: absolute;
+
+}
+.hint-cell .coin.selected{
+    visibility: visible;
+    transition: top 0.3s ease-in;
+    top:0;
 }
 
-footer{
-  padding: 8px 0;
-  color: grey
+
+
+#game-board {
+    background: rgba(42, 44, 129, 0.94);
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: 1fr repeat(6, 1fr);
 }
+
+#stats {
+    background: white;
+    padding: 8px;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px
+}
+
+footer {
+    padding: 8px 0;
+    color: grey
+}
+
+
+.winning-coin img {
+    width: 4vw;
+}
+
+
+#winningBanner {
+    position: fixed;
+    background: var(--main_opaque_7);
+    justify-content: center;
+    border: 6px dashed var(--main_opaque_5);
+    font-size: 24pt;
+    align-items: center;
+    top: 40vh;
+    left: 25vw;
+    right: 25vw;
+    height: 20vh;
+    padding: 12px
+}
+
+#winningBanner div{
+    padding: 8px
+}
+
+

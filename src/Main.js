@@ -2,14 +2,31 @@ import React, {Component} from "react";
 import {Slot} from "./Slot";
 import {faLightbulb} from '@fortawesome/free-regular-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import coin1 from './coin1.png'
+import coin2 from './coin2.png'
+import {faRedo} from "@fortawesome/free-solid-svg-icons";
 
 const BOARD_COL_COUNT = 7;
 const BOARD_ROW_COUNT = 6;
 
+const PLAYERS = [{
+	name: "playerA",
+	coin: coin1,
+	position: 1,
+	color:"yellow",
+	won: false
+},{
+	name: "playerB",
+	coin: coin2,
+	position: 2,
+	color:"red",
+	won: false
+}];
+
 const INITIAL_STATE = {
 	slots: Array(BOARD_COL_COUNT * BOARD_ROW_COUNT).fill(0),
 	columnSelected: -1,
-	player: 1,
+	player: PLAYERS[0],
 	turn: 0,
 	columnState: [],
 	nextFree: -1,
@@ -31,26 +48,41 @@ export class Main extends Component {
 		}
 		const nextSlot = this.findNextFreeSlotForColumn(col);
 
-		this.setState(state => {
-			const newSlots = state.slots;
-			newSlots[nextSlot] = state.player;
-			const turn = state.turn++;
+		if(nextSlot === -1){
+			return;
+		}
 
-			return {
-				slots: newSlots,
-				player: turn % 2 > 0 ? 1 : 2,
-				turn: state.turn++,
-			}
-		});
+		// const currPosY= document.querySelector(".hint-cell .coin.selected").getBoundingClientRect().y;
+		// document.querySelector(".hint-cell .coin.selected").style.top=`${}px`;
+		// console.log(currPosY,newPos2, parseInt(nextSlot / col));
 
+
+		// setTimeout(() =>{
+			this.setState(state => {
+				const newSlots = state.slots;
+				newSlots[nextSlot] = state.player.position;
+				const turn = state.turn++;
+
+				return {
+					slots: newSlots,
+					player: turn % 2 > 0 ? PLAYERS[0] : PLAYERS[1],
+					turn: state.turn++,
+				}
+			});
+			// document.querySelector(".hint-cell .coin.selected").style.transition= "none";
+			// document.querySelector(".hint-cell .coin.selected").style.top=`0px`;
+		// },400);
+
+		// this.resetTransition();
 
 		const winningSet = this.checkWinningCondition(nextSlot);
-		console.log(winningSet)
-		console.log(this.state.slots)
-		console.log(winningSet.map(e => this.state.slots[e]));
 		if(winningSet.length > 0){
 			this.setState(state => ({winningSet, winner: this.state.slots[winningSet[3]], gameActive: !state.gameActive}))
 		}
+	};
+
+	resetTransition = () =>{
+		document.querySelector(".hint-cell .coin.selected").style.transition= "top 0.3s ease-in";
 	};
 
 	handleHover = (columnSelected) => {
@@ -67,7 +99,7 @@ export class Main extends Component {
 		this.setState({
 			slots: Array(BOARD_COL_COUNT * BOARD_ROW_COUNT).fill(0),
 			columnSelected: -1,
-			player: 1,
+			player: PLAYERS[0],
 			turn: 0,
 			columnState: [],
 			nextFree: -1,
@@ -87,7 +119,7 @@ export class Main extends Component {
 		for (let i = 1; i < 4; i++) {
 			const nextNeighbor = lastCoin + i * (BOARD_ROW_COUNT + 1);
 			if(nextNeighbor <= BOARD_ROW_COUNT * BOARD_COL_COUNT){
-				if(slots[nextNeighbor] === player){
+				if(slots[nextNeighbor] === player.position){
 					verticalNeighbors.push(nextNeighbor);
 
 					if(verticalNeighbors.length === 4) {
@@ -101,8 +133,8 @@ export class Main extends Component {
 		let horizontalNeighbors = [lastCoin];
 		for(let i = 1; i < 4; i++){
 			const nextNeighbor = lastCoin - i;
-			if(nextNeighbor <= BOARD_ROW_COUNT * BOARD_COL_COUNT && slots[nextNeighbor] === player){
-				horizontalNeighbors.push(nextNeighbor)
+			if(nextNeighbor <= BOARD_ROW_COUNT * BOARD_COL_COUNT && slots[nextNeighbor] === player.position){
+				horizontalNeighbors.push(nextNeighbor);
 
 				if(horizontalNeighbors.length === 4) {
 					return horizontalNeighbors;
@@ -115,7 +147,7 @@ export class Main extends Component {
 		//checkRight
 		for(let i = 1; i < 4; i++){
 			const nextNeighbor = lastCoin + i;
-			if(nextNeighbor <= BOARD_ROW_COUNT * BOARD_COL_COUNT && slots[nextNeighbor] === player){
+			if(nextNeighbor <= BOARD_ROW_COUNT * BOARD_COL_COUNT && slots[nextNeighbor] === player.position){
 				horizontalNeighbors.push(nextNeighbor);
 
 				if(horizontalNeighbors.length === 4) {
@@ -131,8 +163,8 @@ export class Main extends Component {
 		for(let i = 1; i < 4; i++){
 			const nextNeighbor = lastCoin + (i * (BOARD_COL_COUNT - 1));
 			console.log("up1", nextNeighbor);
-			if(nextNeighbor <= BOARD_ROW_COUNT * BOARD_COL_COUNT && slots[nextNeighbor] === player){
-				console.log("filled",nextNeighbor)
+			if(nextNeighbor <= BOARD_ROW_COUNT * BOARD_COL_COUNT && slots[nextNeighbor] === player.position){
+				console.log("filled",nextNeighbor);
 				diagonaleNeighborsUp.push(nextNeighbor);
 
 				if(diagonaleNeighborsUp.length === 4) {
@@ -146,7 +178,7 @@ export class Main extends Component {
 		for(let i = 1; i < 4; i++){
 			const nextNeighbor = lastCoin - (i * (BOARD_COL_COUNT - 1));
 			console.log("up2", nextNeighbor);
-			if(nextNeighbor <= BOARD_ROW_COUNT * BOARD_COL_COUNT && slots[nextNeighbor] === player){
+			if(nextNeighbor <= BOARD_ROW_COUNT * BOARD_COL_COUNT && slots[nextNeighbor] === player.position){
 				diagonaleNeighborsUp.push(nextNeighbor);
 
 				if(diagonaleNeighborsUp.length === 4) {
@@ -162,7 +194,7 @@ export class Main extends Component {
 		for(let i = 1; i < 4; i++){
 			const nextNeighbor = lastCoin - (i * (BOARD_COL_COUNT + 1 ));
 			console.log("down1", nextNeighbor);
-			if(nextNeighbor <= BOARD_ROW_COUNT * BOARD_COL_COUNT && slots[nextNeighbor] === player){
+			if(nextNeighbor <= BOARD_ROW_COUNT * BOARD_COL_COUNT && slots[nextNeighbor] === player.position){
 				diagonaleNeighborsDown.push(nextNeighbor);
 
 				if(diagonaleNeighborsDown.length === 4) {
@@ -176,7 +208,7 @@ export class Main extends Component {
 		for(let i = 1; i < 4; i++){
 			const nextNeighbor = lastCoin + (i * (BOARD_COL_COUNT + 1 ));
 			console.log("down2", nextNeighbor);
-			if(nextNeighbor <= BOARD_ROW_COUNT * BOARD_COL_COUNT && slots[nextNeighbor] === player){
+			if(nextNeighbor <= BOARD_ROW_COUNT * BOARD_COL_COUNT && slots[nextNeighbor] === player.position){
 				diagonaleNeighborsDown.push(nextNeighbor);
 
 				if(diagonaleNeighborsDown.length === 4) {
@@ -213,10 +245,9 @@ export class Main extends Component {
 		for (let i = 0; i < BOARD_COL_COUNT; i++) {
 			hintCoins.push(
 				<div className="hint-cell" key={i}>
-					<div className="coin"
+					<div className={`coin ${columnSelected === i ? 'selected' : ''}`}
 					     style={{
-						     background: player === 1 ? 'green' : 'blue',
-						     visibility: columnSelected === i ? 'visible' : 'hidden'
+						     backgroundImage: `url(${player.coin})`
 					     }}/>
 				</div>)
 
@@ -235,7 +266,9 @@ export class Main extends Component {
 				<Slot key={i}
 				      columnSelected={col === columnSelected}
 				      filled={slots[index]}
+				      noFree={this.findNextFreeSlotForColumn(columnSelected) === -1}
 				      index={index}
+				      players={PLAYERS}
 				      onClick={() => this.handleClick(col)}
 				      onHover={() => this.handleHover(col)}/>)
 		}
@@ -246,32 +279,28 @@ export class Main extends Component {
 	render() {
 
 		const {player, turn, winningSet,winner, gameActive} = this.state;
-		const winningBanner = {
-			display: winningSet.length > 0 ? 'block' : 'none',
-			position: "fixed",
-			background: "rgba(200,200,200,0.7)",
-			top: "50%",
-			left:0,
-			right:0,
-			height:"40px",
-			padding:"12px"
-		};
 
 		return (<div id="main">
 			<div id="stats">
 				<div style={{color: gameActive ? '#ffe32f' : 'grey'}}>
 					<FontAwesomeIcon icon={faLightbulb}/>
 				</div>
-				<div>player:
-					<span style={{color: player === 1 ? "green" : "blue"}}>
-					{player}
+				<div>next:
+					<span>
+						{this.state.gameActive ? " "+player.name : '-'}
 					</span>
 				</div>
-				<div>turn: {turn}</div>
-				<div style={winningBanner}>
-					<span style={{color: winner === 1 ? "green" : "blue"}}>
-					{winner} WINS!
-					</span>
+				<div>turns: {turn}</div>
+				<div id="winningBanner" style={{display: winningSet.length > 0 ? 'flex' : 'none',}}>
+					<div className="winning-coin">
+						<img src={PLAYERS.find(e => e.position === winner)?.coin} alt="winning coin color"/>
+					</div>
+					<div>
+					 {PLAYERS.find(e => e.position === winner)?.name} WINS!
+					</div>
+					<div className="winning-coin">
+						<img src={PLAYERS.find(e => e.position === winner)?.coin} alt="winning coin color"/>
+					</div>
 				</div>
 			</div>
 			<div id="game-board">
@@ -279,7 +308,11 @@ export class Main extends Component {
 				{this.prepareSlots()}
 			</div>
 			<div id="options">
-				<button onClick={() => this.clearState()}>New Game</button>
+				<button onClick={() => this.clearState()}>
+					<FontAwesomeIcon icon={faRedo}/>
+					&nbsp;
+					restart
+				</button>
 			</div>
 		</div>);
 	}

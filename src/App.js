@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import {Main} from "./Main";
+import logo from './logo.svg';
 
 function App() {
   return (
@@ -10,7 +11,9 @@ function App() {
       </header>
       <Main/>
       <footer>
-          <small>created by Leona Kuse</small>
+          <small>created with</small>
+          <img src={logo} className="App-logo" alt="logo" />
+          <small>by Leona Kuse</small>
       </footer>
     </div>
   );
