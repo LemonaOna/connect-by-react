@@ -1,6 +1,6 @@
 import * as React from "react";
 import { MouseEvent as ReactMouseEvent } from "react";
-import {Player} from "./Main";
+import {Player} from "./types/Player";
 
 type SlotProps = {
   filled: number;

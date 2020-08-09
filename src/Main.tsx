@@ -5,19 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import coin1 from "./coin1.png";
 import coin2 from "./coin2.png";
 import { faRedo } from "@fortawesome/free-solid-svg-icons";
-
-type Props = {};
+import {Player} from "./types/Player";
 
 const BOARD_COL_COUNT = 7;
 const BOARD_ROW_COUNT = 6;
-
-export type Player = {
-  name: string;
-  coin: string;
-  position: number;
-  color: string;
-  won: boolean;
-};
 
 const PLAYERS: Player[] = [
   {
@@ -36,7 +27,9 @@ const PLAYERS: Player[] = [
   },
 ];
 
-interface State {
+interface Props {}
+
+interface ComponentState {
   slots: number[];
   columnSelected: number;
   player: Player;
@@ -48,8 +41,8 @@ interface State {
   gameActive: boolean;
 }
 
-export class Main extends React.Component<Props, State> {
-  state: State = {
+export class Main extends React.Component<Props,ComponentState> {
+  state: ComponentState = {
     slots: Array(BOARD_COL_COUNT * BOARD_ROW_COUNT).fill(0),
     columnSelected: -1,
     player: PLAYERS[0],
@@ -78,7 +71,7 @@ export class Main extends React.Component<Props, State> {
       return {
         slots: newSlots,
         player: state.turn % 2 > 0 ? PLAYERS[0] : PLAYERS[1],
-        turn: this.state.turn++,
+        turn: state.turn + 1,
       };
     });
 
@@ -126,7 +119,9 @@ export class Main extends React.Component<Props, State> {
 
   checkWinningCondition = (lastCoin: number) => {
     const { player, slots } = this.state;
-    //checkUp ** not possible because last put coin
+
+    //checkUp
+    // ** not possible because last put coin
 
     //checkDown
     let verticalNeighbors = [lastCoin];
@@ -143,6 +138,7 @@ export class Main extends React.Component<Props, State> {
         }
       }
     }
+
     //checkLeft
     let horizontalNeighbors = [lastCoin];
     for (let i = 1; i < 4; i++) {
@@ -216,6 +212,7 @@ export class Main extends React.Component<Props, State> {
     }
 
     let diagonaleNeighborsDown = [lastCoin];
+
     //checkDiagonaleDown
     for (let i = 1; i < 4; i++) {
       const nextNeighbor = lastCoin - i * (BOARD_COL_COUNT + 1);
