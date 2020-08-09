@@ -28,12 +28,11 @@ export const Slot = ({
       onClick={onClick}
       onMouseEnter={onHover}
       className={className}
-      style={{
-        backgroundImage:
-          filled > 0 ? `url(${players[filled - 1].coin})` : "none",
-      }}
     >
-      <div className={filled > 0 ? "coin" : ""} />
+      <div className={filled > 0 ? "coin" : ""} style={{
+        backgroundImage:
+            filled > 0 ? `url(${players[filled - 1].coin})` : "none",
+      }}/>
     </div>
   );
 };
