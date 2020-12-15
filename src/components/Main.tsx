@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import coin1 from "../resources/coin1.png";
 import coin2 from "../resources/coin2.png";
 import { faRedo } from "@fortawesome/free-solid-svg-icons";
-import {Player} from "../types/Player";
+import { Player } from "../types/Player";
 
 const BOARD_COL_COUNT = 7;
 const BOARD_ROW_COUNT = 6;
@@ -33,7 +33,7 @@ interface ComponentState {
   slots: number[];
   columnSelected: number;
   player: Player;
-  turn:number;
+  turn: number;
   columnState: any[];
   nextFree: number;
   winningSet: any[];
@@ -41,7 +41,7 @@ interface ComponentState {
   gameActive: boolean;
 }
 
-export class Main extends React.Component<Props,ComponentState> {
+export class Main extends React.Component<Props, ComponentState> {
   state: ComponentState = {
     slots: Array(BOARD_COL_COUNT * BOARD_ROW_COUNT).fill(0),
     columnSelected: -1,
