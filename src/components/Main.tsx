@@ -2,10 +2,10 @@ import * as React from "react";
 import { Slot } from "./Slot";
 import { faLightbulb } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import coin1 from "./coin1.png";
-import coin2 from "./coin2.png";
+import coin1 from "../resources/coin1.png";
+import coin2 from "../resources/coin2.png";
 import { faRedo } from "@fortawesome/free-solid-svg-icons";
-import {Player} from "./types/Player";
+import {Player} from "../types/Player";
 
 const BOARD_COL_COUNT = 7;
 const BOARD_ROW_COUNT = 6;
